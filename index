@@ -1,300 +1,870 @@
-**Here's a beautiful, romantic single-file birthday website for your girlfriend.** It's modern, emotional, fully responsive, and packed with nice touches like floating hearts, confetti, a virtual cake you can "blow out," typewriter message, photo memories, and music.
+## Best “birthday website for girlfriend” (that you can copy + edit fast)
 
-**How to use:**
-1. Copy all the code below into a new file called `index.html`
-2. Open the file in any browser (double-click it)
-3. Customize:
-   - Change `girlfriendName`
-   - Replace photo URLs with your own pictures
-   - Update the love message
-   - Add your own song URL in the audio element
+After searching, the best ready-to-customize option I found is this **open-source “Birthday Wish Website Template”** repo by **Harmann60**. It’s designed exactly for a loved one’s birthday and has sections like hero, message, story, hall of fame, and gallery—so it feels personal instead of “just a card.” It’s also easy to deploy (Netlify/Vercel/GitHub Pages). 
+
+A second strong option (more “mini surprise site” vibe) is **nikitayadav19/HappyBirthdayGF** (typewriter effect, interactive pages). 
+
+You asked for **HTML + inline CSS + inline JS**, so below is a **single-file** romantic birthday site you can paste into `index.html` and send.
+
+---
+
+## Single-file birthday website (HTML with inline CSS + JS)
+
+Copy everything below into **one file** named `index.html`, then open it in a browser.
+
+> What it includes:
+> - Password-style “little secret” gate (optional)
+> - Typewriter message
+> - Photo gallery (uses your local images or URLs)
+> - “Reasons I love you” reveal
+> - Countdown to her birthday (you set the date)
+> - Confetti burst on button click
 
 ```html
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday, My Love ❤️</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday, My Love</title>
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Dancing+Script:wght@700&display=swap');
-    
-    body {
-      font-family: 'Playfair Display', system-ui, sans-serif;
-    }
-    
-    .title-font {
-      font-family: 'Dancing Script', cursive;
-    }
-
-    .hero-bg {
-      background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('https://picsum.photos/id/1015/2000/1200');
-      background-size: cover;
-      background-position: center;
+    :root{
+      --bg1:#0b1020;
+      --bg2:#240b36;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --accent:#ff4d8d;
+      --accent2:#ffd1e1;
+      --ok:#37d67a;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 22px;
     }
 
-    .heart {
-      position: absolute;
-      font-size: 20px;
-      color: #ff69b4;
-      animation: floatHeart 8s linear infinite;
-      opacity: 0.9;
-      z-index: 10;
-      pointer-events: none;
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(255,77,141,.35), transparent 55%),
+        radial-gradient(900px 700px at 85% 30%, rgba(255,209,225,.25), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
     }
 
-    @keyframes floatHeart {
-      0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-      20% { opacity: 0.9; }
-      100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+    /* subtle floating hearts in background */
+    .bg-hearts{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.18;
+      filter: blur(.2px);
+    }
+    .heart{
+      position:absolute;
+      width:14px; height:14px;
+      transform: rotate(45deg);
+      background: var(--accent);
+      border-radius:4px;
+      animation: floatUp linear infinite;
+    }
+    .heart:before, .heart:after{
+      content:"";
+      position:absolute;
+      width:14px; height:14px;
+      background: var(--accent);
+      border-radius:50%;
+    }
+    .heart:before{ left:-7px; top:0; }
+    .heart:after{ left:0; top:-7px; }
+
+    @keyframes floatUp{
+      from{ transform: translateY(10vh) rotate(45deg); }
+      to{ transform: translateY(-120vh) rotate(45deg); }
     }
 
-    .candle-flame {
-      animation: flame 1.2s infinite alternate ease-in-out;
+    header{
+      padding: 28px 16px 6px;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    .brand{
+      display:flex; gap:10px; align-items:center;
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing:.3px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: linear-gradient(135deg, var(--accent), #b35cff);
+      box-shadow: 0 0 0 6px rgba(255,77,141,.12);
     }
 
-    @keyframes flame {
-      0% { transform: scale(1) rotate(-8deg); }
-      100% { transform: scale(1.15) rotate(8deg); }
+    main{
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 10px 16px 90px;
+      display:grid;
+      gap: 16px;
     }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.3fr .9fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+
+    .hero-left{
+      padding: 26px 22px;
+      position:relative;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.14);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .tag b{ color: var(--accent2); font-weight:700; }
+
+    h1{
+      margin: 14px 0 8px;
+      font-size: clamp(30px, 4.2vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.5px;
+    }
+
+    .sub{
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+      margin: 0 0 14px;
+      max-width: 62ch;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button, .btn{
+      appearance:none;
+      border: 0;
+      cursor:pointer;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 700;
+      color: rgba(10,10,18,.92);
+      background: linear-gradient(135deg, var(--accent2), #fff);
+      box-shadow: 0 14px 30px rgba(255,77,141,.18);
+      transition: transform .12s ease, filter .12s ease;
+      user-select:none;
+    }
+    button:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    button:active{ transform: translateY(0px) scale(.99); }
+
+    .btn-ghost{
+      background: rgba(255,255,255,.10);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow:none;
+    }
+
+    .typebox{
+      margin-top: 10px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.14);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 84px;
+      position:relative;
+    }
+    .cursor{
+      display:inline-block;
+      width: 10px;
+      height: 18px;
+      vertical-align: baseline;
+      margin-left: 2px;
+      background: rgba(255,255,255,.8);
+      animation: blink .9s step-end infinite;
+      border-radius: 2px;
+    }
+    @keyframes blink{ 50%{ opacity:0; } }
+
+    .hero-right{
+      padding: 18px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .panel{
+      padding: 14px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .panel h3{
+      margin: 0 0 6px;
+      font-size: 14px;
+      letter-spacing: .3px;
+      color: var(--accent2);
+      text-transform: uppercase;
+    }
+    .big{
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.3px;
+      margin: 2px 0 0;
+    }
+    .small{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .section{
+      padding: 18px;
+    }
+    .section h2{
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: -.2px;
+    }
+    .section p{ margin: 0; color: var(--muted); line-height: 1.6; }
+
+    .reasons{
+      margin-top: 12px;
+      display:grid;
+      gap: 10px;
+    }
+    .reason{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.12);
+    }
+    .badge{
+      flex:0 0 auto;
+      width:28px;height:28px;
+      border-radius: 10px;
+      display:grid; place-items:center;
+      background: rgba(255,77,141,.22);
+      border: 1px solid rgba(255,77,141,.35);
+      color: var(--accent2);
+      font-weight:900;
+    }
+    .reason b{ color: var(--text); }
+    .hidden{ display:none !important; }
+
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .ph{
+      grid-column: span 4;
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      min-height: 140px;
+      position:relative;
+    }
+    .ph img{
+      width:100%; height:100%;
+      object-fit: cover;
+      display:block;
+      filter: saturate(1.05) contrast(1.05);
+      transform: scale(1.01);
+    }
+    .ph span{
+      position:absolute;
+      left:10px; bottom:10px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.16);
+      font-size: 12px;
+      color: rgba(255,255,255,.88);
+      backdrop-filter: blur(6px);
+    }
+    @media (max-width: 900px){
+      .ph{ grid-column: span 6; }
+    }
+    @media (max-width: 520px){
+      .ph{ grid-column: span 12; }
+    }
+
+    /* secret gate */
+    .gate{
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(900px 600px at 20% 10%, rgba(255,77,141,.25), transparent 55%),
+                  linear-gradient(160deg, rgba(11,16,32,.92), rgba(36,11,54,.92));
+      display:grid;
+      place-items:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .gate-card{
+      width:min(560px, 100%);
+      padding: 18px;
+    }
+    .gate-card h2{ margin: 0 0 6px; }
+    .row{
+      display:flex; gap:10px; margin-top: 12px;
+    }
+    input{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+      outline: none;
+    }
+    input::placeholder{ color: rgba(255,255,255,.45); }
+    .hint{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .error{
+      margin-top: 10px;
+      color: #ffd6e6;
+      background: rgba(255,77,141,.14);
+      border: 1px solid rgba(255,77,141,.25);
+      padding: 10px 12px;
+      border-radius: 14px;
+      display:none;
+    }
+
+    /* confetti canvas */
+    canvas#confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index: 40;
+    }
+
+    footer{
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 16px 30px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    a{ color: var(--accent2); }
   </style>
 </head>
-<body class="bg-gradient-to-br from-pink-50 via-rose-50 to-purple-50 text-gray-800 overflow-x-hidden">
 
-  <!-- Floating Hearts Container -->
-  <div id="hearts" class="fixed inset-0 pointer-events-none z-50"></div>
+<body>
+  <!-- floating hearts background -->
+  <div class="bg-hearts" id="bgHearts"></div>
 
-  <!-- Navbar -->
-  <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="text-2xl font-bold text-pink-600 title-font">For My Love</div>
-      <div class="flex gap-8 text-sm font-medium">
-        <a href="#memories" class="hover:text-pink-600 transition-colors">Memories</a>
-        <a href="#letter" class="hover:text-pink-600 transition-colors">My Letter</a>
-        <a href="#cake" class="hover:text-pink-600 transition-colors">Cake</a>
-        <a href="#music" class="hover:text-pink-600 transition-colors">Our Song</a>
+  <!-- optional secret gate (set ENABLE_GATE in JS) -->
+  <div class="gate" id="gate">
+    <div class="card gate-card">
+      <div class="tag"><span class="dot"></span> A tiny secret just for <b>you</b></div>
+      <h2 style="margin-top:12px;">Enter the magic word</h2>
+      <p class="sub" style="margin:0;">
+        This keeps the page feeling private and special.
+      </p>
+
+      <div class="row">
+        <input id="gateInput" placeholder="Magic word (example: our nickname)" />
+        <button id="gateBtn" style="white-space:nowrap;">Unlock</button>
       </div>
-    </div>
-  </nav>
 
-  <!-- Hero -->
-  <header class="hero-bg h-screen flex items-center justify-center relative text-white">
-    <div class="text-center z-10 px-6">
-      <h1 class="text-7xl md:text-8xl title-font tracking-wider mb-4 text-pink-200">Happy Birthday</h1>
-      <h2 id="hero-name" class="text-6xl md:text-7xl font-bold mb-6 text-white">My Beautiful [Name]</h2>
-      <p class="text-2xl md:text-3xl mb-10 text-pink-100">You make every day feel like magic</p>
-      
-      <button onclick="startCelebration()" 
-              class="bg-white text-pink-600 hover:bg-pink-100 transition-all px-10 py-4 rounded-full text-xl font-semibold shadow-xl flex items-center gap-3 mx-auto">
-        <i class="fas fa-heart"></i>
-        Celebrate With Me
-      </button>
-    </div>
+      <div class="hint">
+        Tip: set the magic word in the JS at the bottom (MAGIC_WORD).
+        Or disable this gate completely (ENABLE_GATE = false).
+      </div>
 
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-      <i class="fas fa-chevron-down text-4xl text-white/70"></i>
+      <div class="error" id="gateError">Not quite—try the nickname we use for each other.</div>
+    </div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <span>Birthday Website • made with love</span>
     </div>
   </header>
 
-  <!-- Memories Section -->
-  <section id="memories" class="py-24 px-6 max-w-6xl mx-auto">
-    <h2 class="text-5xl title-font text-center mb-4 text-pink-700">Our Beautiful Memories</h2>
-    <p class="text-center text-xl text-gray-600 mb-16">Every moment with you is my favorite</p>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Replace these image URLs with your real photos -->
-      <div class="group relative overflow-hidden rounded-3xl shadow-xl">
-        <img src="https://picsum.photos/id/1015/800/600" alt="Memory 1" class="w-full h-80 object-cover transition-transform group-hover:scale-110">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
-          <p class="text-white text-lg">Our first date ❤️</p>
-        </div>
-      </div>
-      
-      <div class="group relative overflow-hidden rounded-3xl shadow-xl">
-        <img src="https://picsum.photos/id/1027/800/600" alt="Memory 2" class="w-full h-80 object-cover transition-transform group-hover:scale-110">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
-          <p class="text-white text-lg">Beach sunset together</p>
-        </div>
-      </div>
-      
-      <div class="group relative overflow-hidden rounded-3xl shadow-xl">
-        <img src="https://picsum.photos/id/201/800/600" alt="Memory 3" class="w-full h-80 object-cover transition-transform group-hover:scale-110">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
-          <p class="text-white text-lg">The day I fell in love</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <main>
+    <section class="card hero">
+      <div class="hero-left">
+        <div class="tag">Today is all about <b id="herNameTag">you</b></div>
 
-  <!-- Love Letter -->
-  <section id="letter" class="py-24 bg-white">
-    <div class="max-w-3xl mx-auto px-6">
-      <div class="bg-gradient-to-br from-pink-100 to-rose-100 rounded-3xl p-12 shadow-2xl">
-        <h2 class="text-5xl title-font text-center mb-10 text-pink-700">My Dearest [Name]</h2>
-        
-        <div class="prose prose-lg text-gray-700 leading-relaxed space-y-6 text-justify">
-          <p>Today the world is a little brighter because you were born. Every single day I'm grateful that I get to love you.</p>
-          <p>You are my peace, my laughter, my home. Your smile melts me, your voice is my favorite sound, and your love is the greatest gift I've ever received.</p>
-          <p class="text-pink-600 font-semibold">Thank you for being you. Thank you for choosing me. I promise to keep making you feel as special as you make me feel every single day.</p>
-          <p class="text-right mt-10">— Forever yours, [Your Name]</p>
+        <h1>
+          Happy Birthday,<br />
+          <span style="color:var(--accent2);" id="herNameTitle">My Love</span>
+        </h1>
+
+        <p class="sub" id="subtitle">
+          I made you a tiny corner of the internet that feels like us—soft, warm, silly, and real.
+        </p>
+
+        <div class="typebox" aria-live="polite">
+          <span id="typed"></span><span class="cursor"></span>
         </div>
+
+        <div class="actions">
+          <button id="confettiBtn">Make it rain confetti</button>
+          <button class="btn-ghost" id="revealBtn">Reveal “reasons I love you”</button>
+          <button class="btn-ghost" id="musicBtn">Play / pause music</button>
+        </div>
+
+        <audio id="bgm" preload="auto" loop>
+          <!-- Replace with your own song file if you want.
+               Put "song.mp3" next to index.html or use a direct URL. -->
+          <source src="song.mp3" type="audio/mpeg">
+        </audio>
       </div>
-    </div>
-  </section>
 
-  <!-- Virtual Cake -->
-  <section id="cake" class="py-24 px-6 bg-gradient-to-br from-rose-100 to-pink-100">
-    <div class="max-w-2xl mx-auto text-center">
-      <h2 class="text-5xl title-font mb-4 text-pink-700">Make a Wish, Baby</h2>
-      <p class="mb-12 text-xl">Blow out the candles and make a wish!</p>
+      <div class="hero-right">
+        <div class="panel">
+          <h3>Countdown</h3>
+          <div class="big" id="countdown">Loading…</div>
+          <div class="small" id="countdownNote">to your birthday</div>
+        </div>
 
-      <div class="relative mx-auto w-80">
-        <!-- Cake -->
-        <div class="bg-gradient-to-b from-pink-400 to-rose-500 h-64 rounded-b-[100px] relative shadow-2xl mx-auto w-72 border-b-8 border-pink-600">
-          <!-- Icing -->
-          <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-white/90 w-80 h-20 rounded-full shadow-inner"></div>
-          
-          <!-- Candles -->
-          <div class="absolute -top-20 left-1/2 -translate-x-1/2 flex gap-6">
-            <div class="candle text-center">
-              <div class="w-3 h-14 bg-yellow-300 mx-auto rounded-t-full relative">
-                <div id="flame1" class="candle-flame absolute -top-6 left-1/2 -translate-x-1/2 text-2xl">🔥</div>
-              </div>
-            </div>
-            <div class="candle text-center">
-              <div class="w-3 h-16 bg-yellow-300 mx-auto rounded-t-full relative">
-                <div id="flame2" class="candle-flame absolute -top-6 left-1/2 -translate-x-1/2 text-3xl">🔥</div>
-              </div>
-            </div>
-            <div class="candle text-center">
-              <div class="w-3 h-12 bg-yellow-300 mx-auto rounded-t-full relative">
-                <div id="flame3" class="candle-flame absolute -top-6 left-1/2 -translate-x-1/2 text-2xl">🔥</div>
-              </div>
-            </div>
+        <div class="panel">
+          <h3>Mini promise</h3>
+          <div class="big">More dates. More laughs.</div>
+          <div class="small">
+            And on the hard days—more patience, more softness, more “I’m here.”
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Quick note</h3>
+          <div class="small">
+            Scroll down for photos + a little story + a message that’s only ours.
           </div>
         </div>
       </div>
+    </section>
 
-      <button onclick="blowCandles()" 
-              class="mt-12 bg-pink-600 hover:bg-pink-700 text-white px-12 py-4 rounded-full text-xl font-medium shadow-xl transition-all active:scale-95">
-        <i class="fas fa-wind mr-2"></i> Blow Out the Candles
-      </button>
-    </div>
-  </section>
+    <section class="card section">
+      <h2>Our little story</h2>
+      <p id="story">
+        I don’t just love you. I love who I become around you—calmer, braver, more myself.
+        You turn ordinary days into the kind we remember.
+      </p>
+    </section>
 
-  <!-- Music -->
-  <section id="music" class="py-24 px-6 bg-white">
-    <div class="max-w-xl mx-auto text-center">
-      <h2 class="text-5xl title-font mb-8 text-pink-700">Our Song</h2>
-      <div class="bg-pink-50 rounded-3xl p-8 shadow-inner">
-        <audio id="loveSong" controls class="w-full">
-          <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-        <p class="mt-6 text-gray-600">Play this while you scroll through our memories ❤️</p>
+    <section class="card section">
+      <h2>Reasons I love you (tap to reveal)</h2>
+      <p>
+        I picked a few that never get old. (You can customize all of these in the JS.)
+      </p>
+
+      <div class="reasons hidden" id="reasons">
+        <!-- populated by JS -->
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer class="py-12 bg-pink-900 text-white text-center">
-    <p class="text-2xl title-font">I love you more than yesterday, but less than tomorrow</p>
-    <p class="mt-6 text-pink-300">Made with all my heart for the most amazing girl in the world</p>
+    <section class="card section">
+      <h2>Gallery</h2>
+      <p>Little snapshots, big feelings.</p>
+
+      <div class="gallery" id="gallery">
+        <!-- populated by JS -->
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>One last thing</h2>
+      <p id="closing">
+        If I could give you one gift that never runs out, it’d be this:
+        feeling loved on random Tuesdays the same way you deserve to feel loved on your birthday.
+      </p>
+
+      <div class="actions" style="margin-top:14px;">
+        <button id="copyBtn">Copy a sweet message</button>
+        <button class="btn-ghost" id="restartBtn">Replay the typing</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Built as a single HTML file (inline CSS + JS). Deploy it easily on GitHub Pages / Netlify.
   </footer>
 
   <script>
-    const girlfriendName = "Sophia"; // ← CHANGE THIS TO HER NAME
-    document.getElementById("hero-name").textContent = girlfriendName;
+    /***********************
+     * EASY CUSTOMIZATION
+     ***********************/
+    const HER_NAME = "Your Girlfriend's Name";
+    const YOUR_NAME = "Your Name";
 
-    // Tailwind script already included via CDN
+    // If you want the “secret gate” screen:
+    const ENABLE_GATE = true;               // set false to remove it
+    const MAGIC_WORD = "ournickname";       // must match exactly (case-insensitive)
 
-    // Floating hearts
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.textContent = ["❤️", "💖", "💗", "💕"][Math.floor(Math.random()*4)];
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (Math.random() * 6 + 7) + "s";
-      heart.style.fontSize = (Math.random() * 18 + 18) + "px";
-      document.getElementById("hearts").appendChild(heart);
+    // Set her birthday date (for the countdown).
+    // Format: YYYY-MM-DD (local time)
+    // Example: "2026-07-18"
+    const BIRTHDAY_DATE = "2026-07-18";
 
-      setTimeout(() => heart.remove(), 15000);
+    // Typewriter message (edit this!)
+    const TYPEWRITER_TEXT =
+`Hey ${HER_NAME} —
+Happy birthday, baby.
+
+You’re my favorite person, my safest place, and my best day.
+
+Today I hope you feel celebrated in a way that’s soft and real:
+good food, cozy laughs, and a million little reminders
+that you are deeply loved.
+
+Love,
+${YOUR_NAME}`;
+
+    // “Reasons I love you” list
+    const REASONS = [
+      "You make me feel at home.",
+      "You’re kind in a way that’s rare.",
+      "Your laugh fixes my whole mood.",
+      "You’re beautiful—yes, but also genuinely good.",
+      "You believe in me (even when I’m shaky).",
+      "You turn boring plans into fun memories."
+    ];
+
+    // Gallery images: use URLs or local files next to index.html
+    const GALLERY = [
+      { src: "photo1.jpg", label: "Us" },
+      { src: "photo2.jpg", label: "That day" },
+      { src: "photo3.jpg", label: "My favorite" },
+      { src: "photo4.jpg", label: "Always" },
+      { src: "photo5.jpg", label: "Smiles" },
+      { src: "photo6.jpg", label: "Forever vibe" }
+    ];
+
+    /***********************
+     * PAGE INIT
+     ***********************/
+    const $ = (s) => document.querySelector(s);
+
+    $("#herNameTag").textContent = HER_NAME;
+    $("#herNameTitle").textContent = HER_NAME;
+
+    // Gate enable/disable
+    const gate = $("#gate");
+    if (!ENABLE_GATE) gate.classList.add("hidden");
+
+    $("#gateBtn").addEventListener("click", tryUnlock);
+    $("#gateInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") tryUnlock();
+    });
+
+    function tryUnlock(){
+      const val = ($("#gateInput").value || "").trim().toLowerCase();
+      const ok = val && val === MAGIC_WORD.trim().toLowerCase();
+      if (ok){
+        gate.classList.add("hidden");
+        startEverything();
+      } else {
+        $("#gateError").style.display = "block";
+      }
     }
 
-    // Start celebration
-    function startCelebration() {
-      confetti({
-        particleCount: 200,
-        spread: 90,
-        origin: { y: 0.6 }
+    // If gate disabled, start immediately
+    if (!ENABLE_GATE) startEverything();
+
+    function startEverything(){
+      seedHearts();
+      buildReasons();
+      buildGallery();
+      runTypewriter();
+      initCountdown();
+      setupButtons();
+      initConfetti();
+    }
+
+    /***********************
+     * Floating hearts
+     ***********************/
+    function seedHearts(){
+      const wrap = $("#bgHearts");
+      wrap.innerHTML = "";
+      const count = 28;
+      for (let i=0;i<count;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        const left = Math.random()*100;
+        const size = 10 + Math.random()*16;
+        const dur = 10 + Math.random()*16;
+        const delay = -Math.random()*dur;
+        h.style.left = left + "vw";
+        h.style.bottom = (-10 - Math.random()*40) + "vh";
+        h.style.width = size + "px";
+        h.style.height = size + "px";
+        h.style.animationDuration = dur + "s";
+        h.style.animationDelay = delay + "s";
+        wrap.appendChild(h);
+      }
+    }
+
+    /***********************
+     * Reasons + Gallery
+     ***********************/
+    function buildReasons(){
+      const box = $("#reasons");
+      box.innerHTML = "";
+      REASONS.forEach((text, idx) => {
+        const row = document.createElement("div");
+        row.className = "reason";
+        row.innerHTML = `
+          <div class="badge">${idx+1}</div>
+          <div><b>${text}</b><div style="color:var(--muted); font-size:13px; margin-top:4px;">
+            (and I could list 100 more)
+          </div></div>
+        `;
+        box.appendChild(row);
       });
-      
-      setTimeout(() => {
-        confetti({
-          particleCount: 150,
-          angle: 60,
-          spread: 70,
-          origin: { x: 0 }
+    }
+
+    function buildGallery(){
+      const g = $("#gallery");
+      g.innerHTML = "";
+      GALLERY.forEach((item) => {
+        const el = document.createElement("div");
+        el.className = "ph";
+        el.innerHTML = `
+          <img alt="${item.label}" src="${item.src}"
+               onerror="this.style.display='none'; this.parentElement.style.minHeight='110px'; this.parentElement.innerHTML += '<span>Missing image: ${item.src}</span>';">
+          <span>${item.label}</span>
+        `;
+        g.appendChild(el);
+      });
+    }
+
+    /***********************
+     * Typewriter
+     ***********************/
+    let typingTimer = null;
+    function runTypewriter(){
+      clearInterval(typingTimer);
+      const out = $("#typed");
+      out.textContent = "";
+      const text = TYPEWRITER_TEXT;
+      let i = 0;
+      typingTimer = setInterval(() => {
+        out.textContent += text[i] || "";
+        i++;
+        if (i >= text.length) clearInterval(typingTimer);
+      }, 18);
+    }
+
+    /***********************
+     * Countdown
+     ***********************/
+    function initCountdown(){
+      const target = new Date(BIRTHDAY_DATE + "T00:00:00");
+      const label = $("#countdownNote");
+
+      function tick(){
+        const now = new Date();
+        const ms = target - now;
+
+        // If already passed, roll to next year
+        if (ms < -24*3600*1000){
+          const next = new Date(target);
+          next.setFullYear(now.getFullYear() + 1);
+          target.setFullYear(next.getFullYear());
+        }
+
+        const diff = target - now;
+        const days = Math.max(0, Math.floor(diff / (1000*60*60*24)));
+        const hrs  = Math.max(0, Math.floor((diff / (1000*60*60)) % 24));
+        const mins = Math.max(0, Math.floor((diff / (1000*60)) % 60));
+
+        $("#countdown").textContent = `${days}d ${hrs}h ${mins}m`;
+        label.textContent = `until ${HER_NAME}’s birthday (${BIRTHDAY_DATE})`;
+      }
+
+      tick();
+      setInterval(tick, 1000*15);
+    }
+
+    /***********************
+     * Buttons
+     ***********************/
+    function setupButtons(){
+      $("#revealBtn").addEventListener("click", () => {
+        $("#reasons").classList.toggle("hidden");
+        $("#revealBtn").textContent = $("#reasons").classList.contains("hidden")
+          ? "Reveal “reasons I love you”"
+          : "Hide reasons";
+      });
+
+      $("#restartBtn").addEventListener("click", runTypewriter);
+
+      $("#copyBtn").addEventListener("click", async () => {
+        const msg = `Happy birthday ${HER_NAME} ❤️ You make my life softer and brighter. Love you — ${YOUR_NAME}`;
+        try{
+          await navigator.clipboard.writeText(msg);
+          $("#copyBtn").textContent = "Copied!";
+          setTimeout(() => $("#copyBtn").textContent = "Copy a sweet message", 1200);
+        }catch(e){
+          alert(msg);
+        }
+      });
+
+      // music
+      const audio = $("#bgm");
+      $("#musicBtn").addEventListener("click", async () => {
+        try{
+          if (audio.paused) await audio.play();
+          else audio.pause();
+        }catch(e){
+          alert("Add a file named song.mp3 next to this HTML (or edit the <audio> source).");
+        }
+      });
+
+      // confetti
+      $("#confettiBtn").addEventListener("click", () => burstConfetti(240));
+    }
+
+    /***********************
+     * Confetti (simple canvas particles)
+     ***********************/
+    let confettiCtx, confettiW, confettiH;
+    let particles = [];
+    let rafId = null;
+
+    function initConfetti(){
+      const canvas = $("#confetti");
+      confettiCtx = canvas.getContext("2d");
+
+      function resize(){
+        confettiW = canvas.width = window.innerWidth * devicePixelRatio;
+        confettiH = canvas.height = window.innerHeight * devicePixelRatio;
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      animate();
+    }
+
+    function burstConfetti(n=180){
+      const colors = ["#ff4d8d","#ffd1e1","#ffffff","#b35cff","#7afcff","#ffe27a"];
+      for (let i=0;i<n;i++){
+        particles.push({
+          x: (Math.random()*window.innerWidth) * devicePixelRatio,
+          y: (-20 + Math.random()*40) * devicePixelRatio,
+          vx: (-2 + Math.random()*4) * devicePixelRatio,
+          vy: (2 + Math.random()*6) * devicePixelRatio,
+          r: (2 + Math.random()*4) * devicePixelRatio,
+          rot: Math.random()*Math.PI,
+          vr: (-0.18 + Math.random()*0.36),
+          life: 140 + Math.random()*90,
+          color: colors[(Math.random()*colors.length)|0]
         });
-      }, 300);
+      }
     }
 
-    // Blow candles
-    let candlesBlown = false;
-    
-    function blowCandles() {
-      if (candlesBlown) return;
-      
-      candlesBlown = true;
-      
-      document.getElementById("flame1").style.opacity = "0";
-      document.getElementById("flame2").style.opacity = "0";
-      document.getElementById("flame3").style.opacity = "0";
-      
-      confetti({
-        particleCount: 300,
-        spread: 120,
-        origin: { y: 0.7 }
-      });
+    function animate(){
+      rafId = requestAnimationFrame(animate);
+      if (!confettiCtx) return;
 
-      setTimeout(() => {
-        alert("🎉 Happy Birthday my love! All your wishes are coming true because you deserve the world ❤️");
-      }, 800);
+      confettiCtx.clearRect(0,0,confettiW,confettiH);
+
+      // fade old particles
+      for (let i=particles.length-1;i>=0;i--){
+        const p = particles[i];
+        p.life -= 1;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.06 * devicePixelRatio; // gravity
+        p.rot += p.vr;
+
+        confettiCtx.save();
+        confettiCtx.translate(p.x, p.y);
+        confettiCtx.rotate(p.rot);
+        confettiCtx.globalAlpha = Math.max(0, Math.min(1, p.life/80));
+        confettiCtx.fillStyle = p.color;
+        confettiCtx.fillRect(-p.r, -p.r, p.r*2.2, p.r*1.6);
+        confettiCtx.restore();
+
+        if (p.life <= 0 || p.y > confettiH + 200) particles.splice(i,1);
+      }
     }
-
-    // Typewriter effect for hero (optional enhancement)
-    function typewriterEffect() {
-      // Can be expanded later
-    }
-
-    // Initialize everything
-    window.onload = function() {
-      // Start floating hearts
-      setInterval(createHeart, 280);
-      createHeart();
-      createHeart();
-      createHeart();
-
-      // Initial confetti
-      setTimeout(() => {
-        startCelebration();
-      }, 800);
-
-      // Auto play music hint
-      console.log("%c❤️ Open the music player and enjoy your special day with her!", "color: #db2777; font-size: 16px");
-    };
   </script>
 </body>
 </html>
 ```
 
-**Tips to make it even better:**
-- Replace the three photos with real couple pictures (use direct image links)
-- Change the love letter text to something more personal
-- Replace the audio source with a song that means something to both of you (upload to Google Drive, Dropbox, or any direct link host)
-- Host it for free on Netlify or Vercel so you can send her a nice link
+---
 
-Would you like me to add anything else (photo lightbox, more sections, countdown, etc.)? Just tell me her name or any specific details and I can customize it further!
+## What to change (fast checklist)
+
+1. **Set her name + your name**
+   - `HER_NAME`, `YOUR_NAME`
+
+2. **Set birthday date for countdown**
+   - `BIRTHDAY_DATE = "YYYY-MM-DD"`
+
+3. **Add photos**
+   - Put files named `photo1.jpg` … `photo6.jpg` next to `index.html`  
+   - Or replace those with image URLs in the `GALLERY` array.
+
+4. **(Optional) Add a song**
+   - Put `song.mp3` next to the HTML (or change the `<audio>` source).
+
+5. **Deploy**
+   - Upload the single `index.html` (and photos/song) to GitHub Pages / Netlify / Vercel.
+
+---
+
+## The “best template” sources I used (so you can browse/copy ideas)
+- Harmann60’s **Birthday Wish Website Template** repo (scroll layout, sections, easy deploy).   
+- nikitayadav19’s **HappyBirthdayGF** repo (girlfriend-focused mini site with interactive vibe). 
+
+If you want, you can also take the **structure** from the Harmann60 template and merge it into a single-file build like the one above (their repo uses separate `index.html / style.css / script.js`). 
